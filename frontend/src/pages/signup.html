@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journiqa - Sign Up</title>
+    <link rel="stylesheet" href="../css/signup.css">
+</head>
+<body>
+    <div class="phone-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="back-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="#2C1810" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="header-center">
+                <div class="logo"></div>
+                <span class="brand-text">Journiqa</span>
+            </div>
+            <div class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <!-- Character Section -->
+        <div class="character-section">
+            <div class="character-container">
+                <div class="character">
+                    <div class="character-hat"></div>
+                    <div class="character-head">
+                        <div class="character-eyes"></div>
+                    </div>
+                    <div class="character-body"></div>
+                </div>
+                <div class="speech-bubble">
+                    <p>Sign up for new</p>
+                    <p>experiences</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div class="form-section">
+            <h1 class="sign-up-title">Sign Up</h1>
+            <p class="sign-up-subtitle">Create your account to start your journey</p>
+
+            <form id="signUpForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" name="fullName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email or phone number</label>
+                    <input type="text" class="form-input" name="email" placeholder="Enter email or phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" name="password" placeholder="Create password" required>
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                        <span class="strength-text">Password strength</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-input" name="confirmPassword" placeholder="Confirm password" required>
+                </div>
+                <button type="submit" class="sign-up-button">Create Account</button>
+            </form>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <button class="google-button" onclick="handleGoogleSignUp()">
+                <div class="google-icon"></div>
+                Continue with Google
+            </button>
+
+            <div class="sign-in-link">
+                Already have an account? <a href="login.html">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/signup.js"></script>
+</body>
+</html>

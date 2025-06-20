@@ -1,0 +1,518 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #FFF8E7 0%, #FFE4B8 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Main Container */
+.phone-container {
+    width: 375px;
+    max-height: 95vh;
+    background: #FFF8E7;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+
+.back-button {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: rgba(212, 102, 31, 0.1);
+}
+
+.header-center {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+    background: #D4661F;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.logo::after {
+    content: 'J';
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.brand-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2C1810;
+}
+
+.menu-icon {
+    width: 24px;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-icon span {
+    width: 100%;
+    height: 2px;
+    background: #2C1810;
+    border-radius: 1px;
+    transition: all 0.3s ease;
+}
+
+/* Character Section */
+.character-section {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: center;
+}
+
+.character-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.character {
+    width: 70px;
+    height: 70px;
+    position: relative;
+}
+
+.character-body {
+    width: 45px;
+    height: 35px;
+    background: #D4661F;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.character-head {
+    width: 36px;
+    height: 36px;
+    background: #F4C2A1;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.character-hat {
+    width: 40px;
+    height: 22px;
+    background: #8B4513;
+    border-radius: 20px 20px 0 0;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.character-eyes {
+    width: 4px;
+    height: 4px;
+    background: #2C1810;
+    border-radius: 50%;
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: -7px 0 0 #2C1810, 7px 0 0 #2C1810;
+}
+
+.speech-bubble {
+    background: white;
+    padding: 14px 18px;
+    border-radius: 16px;
+    border: 2px solid #E8D5B7;
+    position: relative;
+    max-width: 200px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right-color: #E8D5B7;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-right-color: white;
+}
+
+.speech-bubble p {
+    font-size: 14px;
+    color: #2C1810;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.speech-bubble p:first-child {
+    font-weight: 600;
+}
+
+/* Form Section */
+.form-section {
+    animation: fadeInUp 0.6s ease;
+}
+
+.sign-up-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2C1810;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.sign-up-subtitle {
+    font-size: 16px;
+    color: #8B6914;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2C1810;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #E8D5B7;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #FFFFFF;
+    color: #2C1810;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #D4661F;
+    box-shadow: 0 0 0 3px rgba(212, 102, 31, 0.1);
+}
+
+.form-input::placeholder {
+    color: #B8860B;
+}
+
+.form-input.valid {
+    border-color: #28a745;
+}
+
+.form-input.invalid {
+    border-color: #dc3545;
+}
+
+/* Password Strength */
+.password-strength {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 6px;
+    background: #E8D5B7;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    background: #dc3545;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    border-radius: 3px;
+}
+
+.strength-text {
+    font-size: 12px;
+    color: #8B6914;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Checkbox */
+.checkbox-group {
+    margin-bottom: 20px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #2C1810;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #E8D5B7;
+    border-radius: 4px;
+    margin-right: 12px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: #D4661F;
+    border-color: #D4661F;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkbox-label a {
+    color: #D4661F;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.checkbox-label a:hover {
+    text-decoration: underline;
+}
+
+/* Buttons */
+.sign-up-button {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #FFB347 0%, #FF8C00 100%);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+}
+
+.sign-up-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+}
+
+.sign-up-button:active {
+    transform: translateY(0);
+}
+
+.sign-up-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #E8D5B7;
+}
+
+.divider span {
+    padding: 0 16px;
+    font-size: 14px;
+    color: #8B6914;
+    font-weight: 500;
+}
+
+/* Google Button */
+.google-button {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #E8D5B7;
+    border-radius: 12px;
+    background: white;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2C1810;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+}
+
+.google-button:hover {
+    border-color: #D4661F;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    background: linear-gradient(45deg, #4285F4, #34A853, #FBBC05, #EA4335);
+    border-radius: 50%;
+}
+
+/* Sign In Link */
+.sign-in-link {
+    text-align: center;
+    font-size: 14px;
+    color: #8B6914;
+}
+
+.sign-in-link a {
+    color: #D4661F;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.sign-in-link a:hover {
+    text-decoration: underline;
+}
+
+/* Loading State */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading .sign-up-button {
+    background: #ccc;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    .phone-container {
+        width: 100%;
+        border-radius: 0;
+        min-height: 100vh;
+        max-height: none;
+    }
+    
+    body {
+        padding: 0;
+    }
+    
+    .character-container {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .speech-bubble {
+        margin-top: 8px;
+    }
+    
+    .speech-bubble::before {
+        left: 50%;
+        top: -10px;
+        transform: translateX(-50%);
+        border: 10px solid transparent;
+        border-bottom-color: #E8D5B7;
+    }
+    
+    .speech-bubble::after {
+        left: 50%;
+        top: -8px;
+        transform: translateX(-50%);
+        border: 8px solid transparent;
+        border-bottom-color: white;
+    }
+}
