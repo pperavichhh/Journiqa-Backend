@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/users.js');  
 
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -75,5 +77,52 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Google login route
+// POST /users/google-login
+router.post('/google-login', async (req, res) => {
+  try {
+    const { id_token } = req.body;
+
+    if (!id_token) return res.status(400).json({ error: 'Missing id_token' });
+
+    const ticket = await client.verifyIdToken({
+      idToken: id_token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
+
+    // 1. ค้นหาผู้ใช้ใน DB
+    let user = await User.findOne({ email });
+
+    // 2. ถ้าไม่เจอ → สร้างผู้ใช้ใหม่
+    if (!user) {
+      user = new User({
+        username: name,
+        email,
+        password: '',  // Google users don't need a password
+        telphone: '',
+        start_member_date: new Date()
+      });
+      await user.save();
+    }
+
+    // 3. ส่งข้อมูลกลับ (สามารถส่ง JWT หรือ session ก็ได้)
+    res.json({
+      message: 'Login successful',
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
+  } catch (err) {
+    console.error('Google login error:', err);
+    res.status(401).json({ error: 'Invalid ID token' });
+  }
+});
+
 
 module.exports = router;
