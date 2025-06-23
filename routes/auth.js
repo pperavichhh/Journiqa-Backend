@@ -1,8 +1,9 @@
-// backend/routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const User = require('../models/users'); // Import User model
+const passport = require('passport'); // นำเข้า passport
+const User = require('../models/users');
+const dotenv = require('dotenv');
 
 // --- Secret Key สำหรับ JWT ---
 const jwtSecret = process.env.JWT_SECRET;
@@ -121,5 +122,29 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// --- Route สำหรับเริ่มต้น Google OAuth (ผู้ใช้คลิกปุ่มนี้ใน Frontend) ---
+router.get('/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+// --- Google callback route (Google จะ Redirect มาที่นี่หลังจาก Login สำเร็จ) ---
+router.get('/google/callback',
+    passport.authenticate('google', { failureRedirect: '/auth/login' }), // หากการยืนยันตัวตนล้มเหลว Redirect ไปหน้า Login
+    (req, res) => {
+        // หาก Passport Authentication สำเร็จ (ผู้ใช้ Login ด้วย Google สำเร็จ)
+        // req.user จะมีข้อมูลผู้ใช้ที่ Passport ดึงมาจาก deserializeUser()
+        if (req.user) {
+            // สร้าง JWT ของระบบคุณเอง จาก ID ของผู้ใช้ที่ได้จากฐานข้อมูลของคุณ
+            const token = generateToken(req.user._id); // req.user._id คือ ID จาก MongoDB ที่ Passport serialize/deserialize มาให้
+            const frontendRedirectUrl = `http://localhost:5000/`; // <<< ปรับ URL นี้ให้ตรงกับ Frontend ของคุณ
+
+            res.redirect(frontendRedirectUrl);
+        } else {
+            // กรณีที่ไม่น่าจะเกิดขึ้นถ้า failureRedirect ทำงานแล้ว
+            res.status(500).json({ error: 'Google login failed for an unknown reason.' });
+        }
+    }
+);
+
 module.exports = router;
-module.exports.authenticateToken = authenticateToken; // Export middleware
+module.exports.authenticateToken = authenticateToken; // ส่งออก middleware เพื่อให้ app.js ใช้งานได้
