@@ -81,9 +81,7 @@ passport.deserializeUser(async (id, done) => {
 // --- Your Routers ---
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-// Apply authentication middleware to protect the /trip routes
 app.use('/trip', authenticateToken, tripaiRouter); 
-// All authentication-related routes (like /register, /login, /google, /google/callback)
 app.use('/auth', authRouter); 
 
 // catch 404 and forward to error handler
