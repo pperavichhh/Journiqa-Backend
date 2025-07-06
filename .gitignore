@@ -3,6 +3,7 @@
 
 # Ignore node modules folder
 node_modules/
+test/
 
 # Hide business logic prompts
 /prompts/*.txt

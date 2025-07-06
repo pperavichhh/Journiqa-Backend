@@ -1,21 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/users.js');  
-
 const { OAuth2Client } = require('google-auth-library');
+const { authenticateToken, generateToken } = require('./auth'); // import from auth.js
+
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.find({}, '-password'); // exclude password
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// POST /users - create user
+// Public route - create user (register)
 router.post('/', async (req, res) => {
   try {
     const { username, email, password, telphone } = req.body;
@@ -40,18 +32,57 @@ router.post('/', async (req, res) => {
     });
 
     await user.save();
-    res.status(201).json({ message: 'User created', id: user._id });
+
+    // Generate JWT token after registration
+    const token = generateToken(user._id);
+
+    res.status(201).json({ 
+      message: 'User created', 
+      id: user._id, 
+      token 
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// PUT /users/:id - update user
-router.put('/:id', async (req, res) => {
+// Public login route - (can add JWT token)
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) return res.status(400).json({ error: 'Missing email or password' });
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const token = generateToken(user._id);
+
+    res.json({ message: 'Login successful', email: user.email, token });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Protected route - get current user profile
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Protected route - update current user
+router.put('/me', authenticateToken, async (req, res) => {
   try {
     const { username, email, password, telphone } = req.body;
-
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     if (username) user.username = username;
@@ -66,12 +97,11 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /users/:id - delete user
-router.delete('/:id', async (req, res) => {
+// Protected route - delete current user
+router.delete('/me', authenticateToken, async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    const deletedUser = await User.findByIdAndDelete(req.user.id);
     if (!deletedUser) return res.status(404).json({ error: 'User not found' });
-
     res.json({ message: 'User deleted' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -79,11 +109,9 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Google login route
-// POST /users/google-login
 router.post('/google-login', async (req, res) => {
   try {
     const { id_token } = req.body;
-
     if (!id_token) return res.status(400).json({ error: 'Missing id_token' });
 
     const ticket = await client.verifyIdToken({
@@ -92,30 +120,30 @@ router.post('/google-login', async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    const { email, name, picture } = payload;
+    const { email, name } = payload;
 
-    // 1. ค้นหาผู้ใช้ใน DB
     let user = await User.findOne({ email });
 
-    // 2. ถ้าไม่เจอ → สร้างผู้ใช้ใหม่
     if (!user) {
       user = new User({
         username: name,
         email,
-        password: '',  // Google users don't need a password
+        password: '',  
         telphone: '',
         start_member_date: new Date()
       });
       await user.save();
     }
 
-    // 3. ส่งข้อมูลกลับ (สามารถส่ง JWT หรือ session ก็ได้)
+    const token = generateToken(user._id);
+
     res.json({
       message: 'Login successful',
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        token,
       }
     });
   } catch (err) {
@@ -123,6 +151,5 @@ router.post('/google-login', async (req, res) => {
     res.status(401).json({ error: 'Invalid ID token' });
   }
 });
-
 
 module.exports = router;

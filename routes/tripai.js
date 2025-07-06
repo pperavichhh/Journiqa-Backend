@@ -6,7 +6,7 @@ const fs = require('fs'); // Node.js File System module
 const path = require('path'); // Node.js Path module
 
 const { authenticateToken } = require('./auth'); // สมมติว่า auth.js อยู่ในโฟลเดอร์เดียวกัน
-const Trip = require('../models/Trip'); // นำเข้า Trip Model
+const Trip = require('../models/trip'); // นำเข้า Trip Model
 const tripPromptPath = path.join(__dirname, '../prompts/prompt.txt');
 const basePrompt = fs.readFileSync(tripPromptPath, 'utf8');
 
@@ -197,13 +197,6 @@ router.post('/plan-trip', async (req, res) => {
         } else {
             res.status(500).json({ error: "เกิดข้อผิดพลาดที่ไม่คาดคิดบนเซิร์ฟเวอร์ขณะสร้างแผนทริป กรุณาตรวจสอบ Log ของเซิร์ฟเวอร์", details: error.message });
         }
-    }
-    // ใน router.post('/plan-trip', ...)
-    if (nominatimDetails) {
-        Object.assign(activity, {
-            location: nominatimDetails.location, // <-- ตรงนี้ location เป็น Object {lat, lng}
-            osm_url: nominatimDetails.osm_url
-        });
     }
 
     
